@@ -1,0 +1,50 @@
+{
+    "name": "dfiks/solscan-laravel",
+    "description": "Solscan API Laravel Package",
+    "version": "v1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "DFiks\\Solscan\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DFiks\\Solscan\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sidorenko Danil",
+            "email": "danilsidorenko00@gmail.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^11.31",
+        "laravel/pint": "^1.18",
+        "fakerphp/faker": "*"
+    },
+    "require-dev": {
+        "orchestra/testbench-core": "^9.4",
+        "phpunit/phpunit": "*"
+    },
+    "scripts": {
+        "lint": [
+            "./vendor/bin/pint"
+        ],
+        "test": [
+            "./vendor/bin/phpunit"
+        ],
+        "atf": [
+            "./vendor/bin/phpunit --filter"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DFiks\\Solscan\\Providers\\SolscanServiceProvider"
+            ]
+        }
+    }
+}
