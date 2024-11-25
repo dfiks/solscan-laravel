@@ -23,7 +23,8 @@
     "require": {
         "laravel/framework": "^11.31",
         "laravel/pint": "^1.18",
-        "fakerphp/faker": "*"
+        "fakerphp/faker": "*",
+        "illuminate/validation": "*"
     },
     "require-dev": {
         "orchestra/testbench-core": "^9.4",

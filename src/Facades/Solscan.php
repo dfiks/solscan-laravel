@@ -3,10 +3,12 @@
 namespace DFiks\Solscan\Facades;
 
 use DFiks\Solscan\Api\AccountApi;
+use DFiks\Solscan\Api\TokenApi;
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static AccountApi account()
+ * @method static TokenApi token()
  */
 class Solscan extends Facade
 {

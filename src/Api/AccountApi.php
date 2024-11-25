@@ -3,11 +3,30 @@
 namespace DFiks\Solscan\Api;
 
 use DFiks\Solscan\Core\Enums\AccountMethod;
-use DFiks\Solscan\Core\Enums\ActivitySplType;
-use DFiks\Solscan\Core\Enums\TokenType;
 use DFiks\Solscan\Core\Exceptions\SolscanAuthenticationFailed;
 use DFiks\Solscan\Core\Exceptions\SolscanInternalServerError;
 use DFiks\Solscan\Core\Exceptions\SolscanTooManyRequests;
+use DFiks\Solscan\Core\Filters\Available\ActivityTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\AmountRangeTokenAddressTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\BeforeSignatureFilter;
+use DFiks\Solscan\Core\Filters\Available\BlockTimeRangeTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\ExcludeAmountZeroTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\FlowFilter;
+use DFiks\Solscan\Core\Filters\Available\FromAddressFilter;
+use DFiks\Solscan\Core\Filters\Available\HideZeroTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\LimitFilter;
+use DFiks\Solscan\Core\Filters\Available\PageFilter;
+use DFiks\Solscan\Core\Filters\Available\PageSizeFilter;
+use DFiks\Solscan\Core\Filters\Available\PlatformAddressTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\RemoveSpamTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\SortByFilter;
+use DFiks\Solscan\Core\Filters\Available\SortOrderFilter;
+use DFiks\Solscan\Core\Filters\Available\SourceAddressTypeFilter;
+use DFiks\Solscan\Core\Filters\Available\ToAddressFilter;
+use DFiks\Solscan\Core\Filters\Available\TokenAccountFilter;
+use DFiks\Solscan\Core\Filters\Available\TokenAddressFilter;
+use DFiks\Solscan\Core\Filters\Available\TokenTypeFilter;
+use DFiks\Solscan\Core\Requests\MethodFilter;
 use DFiks\Solscan\Schemes\Account\Collections\BalanceChangeActivitiesSchemaCollection;
 use DFiks\Solscan\Schemes\Account\Collections\DefiActivitesSchemaCollection;
 use DFiks\Solscan\Schemes\Account\Collections\StakeSchemaCollection;
@@ -22,7 +41,20 @@ class AccountApi extends AbstractSolscanApi
     public const string RESOURCE_TYPE = 'account';
 
     /**
-     * @param  ?array<ActivitySplType>  $activityTypes
+     * @param array{
+     *   activity_type?: ActivityTypeFilter,
+     *   amount?: AmountRangeTokenAddressTypeFilter,
+     *   block_time?: BlockTimeRangeTypeFilter,
+     *   exclude_amount_zero?: ExcludeAmountZeroTypeFilter,
+     *   flow?: FlowFilter,
+     *   from?: FromAddressFilter,
+     *   page?: PageFilter,
+     *   page_size?: PageSizeFilter,
+     *   sort_by?: SortByFilter,
+     *   sort_order?: SortOrderFilter,
+     *   to?: ToAddressFilter,
+     *   token_account?: TokenAccountFilter,
+     *   token?: TokenAddressFilter }|MethodFilter|null $filters
      *
      * @throws ConnectionException
      * @throws SolscanAuthenticationFailed
@@ -31,41 +63,26 @@ class AccountApi extends AbstractSolscanApi
      */
     public function transfer(
         string $address,
-        ?array $activityTypes = null,
-        ?string $tokenAccount = null,
-        ?string $from = null,
-        ?string $to = null,
-        ?string $token = null,
-        ?array $amount = null,
-        ?array $blockTime = null,
-        ?bool $excludeAmountZero = null,
-        ?string $flow = null,
-        ?int $page = null,
-        ?int $pageSize = null,
-        ?string $sortBy = 'block_time',
-        ?string $sortOrder = 'desc',
+        MethodFilter|array|null $filters = null,
     ): TransferSchemaCollection {
+        $request = $this->request->appendFilters($filters)->send(AccountMethod::Transfer, [
+            'address' => $address,
+        ]);
+
         return new TransferSchemaCollection(
-            $this->request->send(AccountMethod::Transfer, [
-                'address' => $address,
-                'activity_type' => $activityTypes,
-                'token_account' => $tokenAccount,
-                'from' => $from,
-                'to' => $to,
-                'token' => $token,
-                'amount' => $amount,
-                'block_time' => $blockTime,
-                'exclude_amount_zero' => $excludeAmountZero,
-                'flow' => $flow,
-                'page' => $page,
-                'page_size' => $pageSize,
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
-            ])
+            $request->getResponse(),
+            $request->getRequest()
         );
     }
 
     /**
+     * @param array{
+     *     type?: TokenTypeFilter,
+     *     page?: PageFilter,
+     *     page_size?: PageSizeFilter,
+     *     hide_zero?: HideZeroTypeFilter
+     * }|MethodFilter|null $filters
+     *
      * @throws ConnectionException
      * @throws SolscanAuthenticationFailed
      * @throws SolscanInternalServerError
@@ -73,24 +90,32 @@ class AccountApi extends AbstractSolscanApi
      */
     public function tokenAccounts(
         string $address,
-        TokenType $tokenType = TokenType::Token,
-        int $page = 1,
-        int $pageSize = 10,
-        bool $hideZero = false,
+        MethodFilter|array|null $filters = null,
+
     ): TokenAccountsSchemaCollection {
+        $request = $this->request->appendFilters($filters)->send(AccountMethod::TokenAccounts, [
+            'address' => $address,
+        ]);
+
         return new TokenAccountsSchemaCollection(
-            $this->request->send(AccountMethod::TokenAccounts, [
-                'address' => $address,
-                'type' => $tokenType,
-                'page' => $page,
-                'page_size' => $pageSize,
-                'hide_zero' => $hideZero,
-            ])
+            $request->getResponse(),
+            $request->getRequest()
         );
     }
 
     /**
-     * @param  ?array<ActivitySplType>  $activityTypes
+     * @param array{
+     *     activity_type?: ActivityTypeFilter,
+     *     from?: FromAddressFilter,
+     *     platform?: PlatformAddressTypeFilter,
+     *     source?: SourceAddressTypeFilter,
+     *     token?: TokenAddressFilter,
+     *     block_time?: BlockTimeRangeTypeFilter,
+     *     page?: PageFilter,
+     *     page_size?: PageSizeFilter,
+     *     sort_by?: SortByFilter,
+     *     sort_order?: SortOrderFilter
+     * }|MethodFilter|null $filters
      *
      * @throws ConnectionException
      * @throws SolscanAuthenticationFailed
@@ -99,35 +124,31 @@ class AccountApi extends AbstractSolscanApi
      */
     public function defiActivities(
         string $address,
-        ?array $activityTypes = null,
-        ?string $from = null,
-        ?array $platformAddresses = null,
-        ?array $sourceAddresses = null,
-        ?string $tokenAddress = null,
-        ?array $blockTimes = null,
-        ?int $page = 1,
-        ?int $pageSize = 10,
-        ?string $sortBy = 'block_time',
-        ?string $sortOrder = 'desc',
+        MethodFilter|array|null $filters = null,
     ): DefiActivitesSchemaCollection {
+        $request = $this->request->appendFilters($filters)->send(AccountMethod::DefiActivities, [
+            'address' => $address,
+        ]);
+
         return new DefiActivitesSchemaCollection(
-            $this->request->send(AccountMethod::DefiActivities, [
-                'address' => $address,
-                'activity_type' => $activityTypes,
-                'from' => $from,
-                'platform' => $platformAddresses,
-                'source' => $sourceAddresses,
-                'token' => $tokenAddress,
-                'block_time' => $blockTimes,
-                'page' => $page,
-                'page_size' => $pageSize,
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
-            ])
+            $request->getResponse(),
+            $request->getRequest()
         );
     }
 
     /**
+     * @param array{
+     *     token?: TokenAddressFilter,
+     *     block_time?: BlockTimeRangeTypeFilter,
+     *     page?: PageFilter,
+     *     page_size?: PageSizeFilter,
+     *     remove_span: ?RemoveSpamTypeFilter,
+     *     amount?: AmountRangeTokenAddressTypeFilter,
+     *     flow?: FlowFilter,
+     *     sort_by?: SortByFilter,
+     *     sort_order?: SortOrderFilter
+     * }|MethodFilter|null $filters
+     *
      * @throws ConnectionException
      * @throws SolscanAuthenticationFailed
      * @throws SolscanInternalServerError
@@ -135,33 +156,24 @@ class AccountApi extends AbstractSolscanApi
      */
     public function balanceChangeActivities(
         string $address,
-        ?string $token = null,
-        ?array $blockTime = null,
-        int $page = 1,
-        int $pageSize = 10,
-        ?bool $removeSpam = null,
-        ?array $amount = null,
-        ?string $flow = null,
-        ?string $sortBy = 'block_time',
-        ?string $sortOrder = 'desc',
+        MethodFilter|array|null $filters = null,
     ): BalanceChangeActivitiesSchemaCollection {
+        $request = $this->request->appendFilters($filters)->send(AccountMethod::BalanceChangeActivities, [
+            'address' => $address,
+        ]);
+
         return new BalanceChangeActivitiesSchemaCollection(
-            $this->request->send(AccountMethod::BalanceChangeActivities, [
-                'address' => $address,
-                'token' => $token,
-                'block_time' => $blockTime,
-                'page' => $page,
-                'page_size' => $pageSize,
-                'remove_spam' => $removeSpam,
-                'amount' => $amount,
-                'flow' => $flow,
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
-            ])
+            $request->getResponse(),
+            $request->getRequest()
         );
     }
 
     /**
+     * @param array{
+     *     before?: BeforeSignatureFilter,
+     *     limit?: LimitFilter,
+     * }|MethodFilter|null $filters
+     *
      * @throws ConnectionException
      * @throws SolscanAuthenticationFailed
      * @throws SolscanInternalServerError
@@ -169,19 +181,24 @@ class AccountApi extends AbstractSolscanApi
      */
     public function transactions(
         string $address,
-        ?string $before = null,
-        ?int $limit = 10
+        MethodFilter|array|null $filters = null,
     ): TransactionsSchemaCollection {
+        $request = $this->request->appendFilters($filters)->send(AccountMethod::Transactions, [
+            'address' => $address,
+        ]);
+
         return new TransactionsSchemaCollection(
-            $this->request->send(AccountMethod::Transactions, [
-                'address' => $address,
-                'before' => $before,
-                'limit' => $limit,
-            ])
+            $request->getResponse(),
+            $request->getRequest()
         );
     }
 
     /**
+     * @param array{
+     *     page?: PageFilter,
+     *     page_size?: PageSizeFilter
+     * }|MethodFilter|null $filters
+     *
      * @throws ConnectionException
      * @throws SolscanAuthenticationFailed
      * @throws SolscanInternalServerError
@@ -189,15 +206,15 @@ class AccountApi extends AbstractSolscanApi
      */
     public function stake(
         string $address,
-        ?int $page = 1,
-        int $pageSize = 10,
+        MethodFilter|array|null $filters = null,
     ): StakeSchemaCollection {
+        $request = $this->request->appendFilters($filters)->send(AccountMethod::Stake, [
+            'address' => $address,
+        ]);
+
         return new StakeSchemaCollection(
-            $this->request->send(AccountMethod::Stake, [
-                'address' => $address,
-                'page' => $page,
-                'page_size' => $pageSize,
-            ])
+            $request->getResponse(),
+            $request->getRequest()
         );
     }
 
@@ -213,7 +230,7 @@ class AccountApi extends AbstractSolscanApi
         return new DetailSchema(
             $this->request->send(AccountMethod::Detail, [
                 'address' => $address,
-            ])
+            ])->getResponse()
         );
     }
 }

@@ -8,4 +8,9 @@ enum ActivitySplType: string
     case Burn = 'ACTIVITY_SPL_BURN';
     case Mint = 'ACTIVITY_SPL_MINT';
     case CreateAccount = 'ACTIVITY_SPL_CREATE_ACCOUNT';
+
+    public static function values(): array
+    {
+        return array_map(fn (self $item) => $item->value, self::cases());
+    }
 }

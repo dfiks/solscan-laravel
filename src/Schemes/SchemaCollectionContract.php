@@ -14,9 +14,12 @@ abstract class SchemaCollectionContract extends Collection implements SolscanSch
 {
     protected array $originalResponse;
 
-    public function __construct(array $response)
+    protected ?array $request;
+
+    public function __construct(array $response, ?array $request = null)
     {
         $this->originalResponse = $response;
+        $this->request = $request;
 
         $items = array_map(
             fn ($item) => new ($this->schema())($item),
@@ -44,6 +47,11 @@ abstract class SchemaCollectionContract extends Collection implements SolscanSch
     public function getErrorMessage(): ?string
     {
         return $this->originalResponse['errors']['message'] ?? null;
+    }
+
+    public function getRequest(): ?array
+    {
+        return $this->request;
     }
 
     public function toArray(): array
