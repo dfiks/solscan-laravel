@@ -2,7 +2,7 @@
 
 namespace DFiks\Solscan\Tests\Api\Token;
 
-use DFiks\Solscan\Core\Enums\TokenMethod;
+use DFiks\Solscan\Core\Enums\Methods\TokenMethod;
 use DFiks\Solscan\Facades\Solscan;
 use DFiks\Solscan\Tests\TestCase;
 use Illuminate\Support\Collection;

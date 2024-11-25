@@ -2,22 +2,22 @@
 
 namespace DFiks\Solscan\Mock;
 
-use DFiks\Solscan\Api\TokenApi;
-use DFiks\Solscan\Core\Enums\Methods\TokenMethod;
+use DFiks\Solscan\Api\TransactionApi;
+use DFiks\Solscan\Core\Enums\Methods\TransactionMethod;
 use DFiks\Solscan\Core\Requests\SolscanRequest;
 use Illuminate\Support\Facades\Http;
 
-class TokenMock
+class TransactionMock
 {
     public static function fake(): void
     {
-        $methods = TokenMethod::cases();
+        $methods = TransactionMethod::cases();
         $baseUrl = SolscanRequest::getDefaultBaseUrl();
         $mockedHttp = [];
 
         foreach ($methods as $method) {
 
-            $key = sprintf('%s/%s/%s*', $baseUrl, TokenApi::RESOURCE_TYPE, $method->value);
+            $key = sprintf('%s/%s/%s*', $baseUrl, TransactionApi::RESOURCE_TYPE, $method->value);
 
             $mockedHttp[$key] = Http::response($method->getFakeSchema()?->toArray() ?? []);
         }

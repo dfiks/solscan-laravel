@@ -2,7 +2,7 @@
 
 namespace DFiks\Solscan\Tests\Api\Account;
 
-use DFiks\Solscan\Core\Enums\AccountMethod;
+use DFiks\Solscan\Core\Enums\Methods\AccountMethod;
 use DFiks\Solscan\Facades\Solscan;
 use DFiks\Solscan\Tests\TestCase;
 use Illuminate\Support\Collection;

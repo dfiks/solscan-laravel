@@ -1,6 +1,6 @@
 <?php
 
-namespace DFiks\Solscan\Core\Enums;
+namespace DFiks\Solscan\Core\Enums\Methods;
 
 use DFiks\Solscan\Core\Contracts\SolscanMethodContract;
 use DFiks\Solscan\Schemes\SchemaCollectionContract;

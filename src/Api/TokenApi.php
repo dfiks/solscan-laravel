@@ -2,7 +2,7 @@
 
 namespace DFiks\Solscan\Api;
 
-use DFiks\Solscan\Core\Enums\TokenMethod;
+use DFiks\Solscan\Core\Enums\Methods\TokenMethod;
 use DFiks\Solscan\Core\Exceptions\SolscanAuthenticationFailed;
 use DFiks\Solscan\Core\Exceptions\SolscanInternalServerError;
 use DFiks\Solscan\Core\Exceptions\SolscanTooManyRequests;

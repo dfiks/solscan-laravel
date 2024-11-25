@@ -3,7 +3,7 @@
 namespace DFiks\Solscan\Mock;
 
 use DFiks\Solscan\Api\AccountApi;
-use DFiks\Solscan\Core\Enums\AccountMethod;
+use DFiks\Solscan\Core\Enums\Methods\AccountMethod;
 use DFiks\Solscan\Core\Requests\SolscanRequest;
 use Illuminate\Support\Facades\Http;
 
