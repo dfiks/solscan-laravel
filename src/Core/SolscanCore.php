@@ -3,9 +3,11 @@
 namespace DFiks\Solscan\Core;
 
 use DFiks\Solscan\Api\AccountApi;
+use DFiks\Solscan\Api\NFTApi;
 use DFiks\Solscan\Api\TokenApi;
 use DFiks\Solscan\Api\TransactionApi;
 use DFiks\Solscan\Mock\AccountMock;
+use DFiks\Solscan\Mock\NftMock;
 use DFiks\Solscan\Mock\TokenMock;
 use DFiks\Solscan\Mock\TransactionMock;
 
@@ -15,6 +17,7 @@ class SolscanCore
         AccountMock::class,
         TokenMock::class,
         TransactionMock::class,
+        NftMock::class,
     ];
 
     public function account(): AccountApi
@@ -30,6 +33,11 @@ class SolscanCore
     public function transaction(): TransactionApi
     {
         return app(TransactionApi::class);
+    }
+
+    public function nft(): NFTApi
+    {
+        return app(NFTApi::class);
     }
 
     public function fake(): void
