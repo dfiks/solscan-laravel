@@ -22,4 +22,9 @@ class TokenMetaSchema extends SchemaContract
     {
         return $this->getDataByKey('token_symbol');
     }
+
+    public function getTokenIcon(): ?string
+    {
+        return $this->getDataByKey('token_icon');
+    }
 }

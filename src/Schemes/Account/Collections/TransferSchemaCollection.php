@@ -18,10 +18,10 @@ class TransferSchemaCollection extends SchemaCollectionContract
         return TransferSchema::class;
     }
 
-    public function tokens(): ?array
+    public function tokens(): ?TokensMetaSchemaCollection
     {
         $data = collect($this->originalResponse['data']['metadata'] ?? []);
 
-        return new TokensMetaCollection;
+        return new TokensMetaSchemaCollection(['data' => $data]);
     }
 }
