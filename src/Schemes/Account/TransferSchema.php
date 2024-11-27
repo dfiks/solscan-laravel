@@ -74,4 +74,16 @@ class TransferSchema extends SchemaContract
     {
         return $this->getDataByKey('fee');
     }
+
+    #[ParameterSchema]
+    public function getAmount(): ?int
+    {
+        return $this->getDataByKey('amount');
+    }
+
+    #[ParameterSchema]
+    public function getValue(): ?float
+    {
+        return $this->getDataByKey('value');
+    }
 }
