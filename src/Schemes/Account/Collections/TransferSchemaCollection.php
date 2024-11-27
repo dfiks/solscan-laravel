@@ -20,7 +20,7 @@ class TransferSchemaCollection extends SchemaCollectionContract
 
     public function tokens(): ?TokensMetaSchemaCollection
     {
-        $data = collect($this->originalResponse['data']['metadata'] ?? []);
+        $data = $this->originalResponse['metadata']['tokens'] ?? [];
 
         return new TokensMetaSchemaCollection(['data' => $data]);
     }
