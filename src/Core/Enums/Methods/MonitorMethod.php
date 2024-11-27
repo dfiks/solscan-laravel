@@ -13,20 +13,14 @@ use DFiks\Solscan\Schemes\Account\DetailSchema;
 use DFiks\Solscan\Schemes\SchemaCollectionContract;
 use Illuminate\Support\Collection;
 
-enum TransactionMethod: string implements SolscanMethodContract
+enum MonitorMethod: string implements SolscanMethodContract
 {
-    case Last = 'last';
-    case Detail = 'detail';
-    case Actions = 'actions';
-
+    case Usage = 'usage';
 
     public function getFakeSchema(): SchemaCollectionContract|Collection|null
     {
         return match ($this) {
-            TransactionMethod::Last => '',
-            TransactionMethod::Detail => '',
-            TransactionMethod::Actions => '',
-
+            MonitorMethod::Usage => '',
 
             default => null,
         };
