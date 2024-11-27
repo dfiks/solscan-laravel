@@ -1,7 +1,8 @@
 {
     "name": "dfiks/solscan-laravel",
     "description": "Solscan API Laravel Package",
-    "version": "v1.0.0-dev",
+    "version": "v1.0.0",
+    "minimum-stability":"dev",
     "type": "library",
     "license": "MIT",
     "autoload": {
