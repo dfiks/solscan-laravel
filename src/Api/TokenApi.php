@@ -147,7 +147,7 @@ class TokenApi extends AbstractSolscanApi
         ]);
 
         return new TokenMarketInfoSchema(
-            $request->getResponse() ?? []
+            $request->getResponse()['data'] ?? []
         );
     }
 
