@@ -123,8 +123,8 @@ class TokenApi extends AbstractSolscanApi
         string $address,
         MethodFilter|array|null $filters = null,
     ): TokenMarketsSchemaCollection {
-        $request = $this->request->appendFilters($filters)->send(TokenMethod::DefiActivities, [
-            'address' => $address,
+        $request = $this->request->appendFilters($filters)->send(TokenMethod::Markets, [
+            'token[]' => $address,
         ]);
 
         return new TokenMarketsSchemaCollection(
@@ -147,7 +147,7 @@ class TokenApi extends AbstractSolscanApi
         ]);
 
         return new TokenMarketInfoSchema(
-            $request->getResponse()
+            $request->getResponse() ?? []
         );
     }
 
@@ -170,7 +170,7 @@ class TokenApi extends AbstractSolscanApi
         ]);
 
         return new TokenMarketVolumeSchema(
-            $request->getResponse()
+            $request->getResponse()['data'] ?? []
         );
     }
 
@@ -284,7 +284,7 @@ class TokenApi extends AbstractSolscanApi
         ]);
 
         return new TokenMetaSchema(
-            $request->getResponse(),
+            $request->getResponse()['data'] ?? [],
         );
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 class TransferSchema extends SchemaContract
 {
     #[ParameterSchema]
-    public function getBlockId(): ?int
+    public function getBlockId(): ?string
     {
         return $this->getDataByKey('block_id');
     }

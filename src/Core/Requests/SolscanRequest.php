@@ -31,6 +31,7 @@ class SolscanRequest
     public function send(SolscanMethodContract $method, array $options = [], ?string $url = null): static
     {
         $request = Http::baseUrl($requestUrl = $url ?? self::getDefaultBaseUrl())
+            ->retry(3, 1000*30)
             ->withHeaders($headers = [
                 'token' => Config::get('solscan.token'),
                 'accept' => 'application/json',
